@@ -1,0 +1,40 @@
+library(tidyverse)
+df <- read_csv("Spotify_Youtube.csv")
+colSums(is.na(df))
+df <- df[complete.cases(df), ]
+library(dplyr)
+library(ggplot2)
+artist_views <- df %>%
+  group_by(Artist) %>%
+  summarise(TotalViews = sum(Views, na.rm = TRUE)) %>%
+  arrange(desc(TotalViews))
+ggplot(artist_views[1:10, ], aes(x = reorder(Artist, -TotalViews), y = TotalViews)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Artists by Views",
+       x = "Artist",
+       y = "Total Views") +
+  theme_minimal()
+song_views <- df %>%
+  group_by(Track) %>%
+  summarise(TotalViews = sum(Views, na.rm = TRUE)) %>%
+  arrange(desc(TotalViews))
+ggplot(song_views[1:10, ], aes(x = reorder(Track, -TotalViews), y = TotalViews)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Songs by Views",
+       x = "Song",
+       y = "Total Views") +
+  theme_minimal()
+artist_likes <- df %>%
+  group_by(Artist) %>%
+  summarise(TotalLikes = sum(Likes, na.rm = TRUE)) %>%
+  arrange(desc(TotalLikes))
+ggplot(artist_likes[1:10, ], aes(x = reorder(Artist, -TotalLikes), y = TotalLikes)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Artists by Likes",
+       x = "Artist",
+       y = "Total Likes") +
+  theme_minimal()
+save.image("C:\\Users\\saken\\OneDrive\\Документы\\Spotify_Youtube.txt")
